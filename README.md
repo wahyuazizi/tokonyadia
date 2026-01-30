@@ -12,6 +12,13 @@ Tokonyadia is a practice project designed to explore and learn Spring Boot funda
 - Java
 - Maven
 
+## Branches
+
+- `main` - Main branch
+- `TanpaDTO` - Implementation without DTO pattern
+- `DTO` - Implementation with DTO pattern
+
+
 ## Project Status
 
 🚧 This is a learning project and actively under development.
