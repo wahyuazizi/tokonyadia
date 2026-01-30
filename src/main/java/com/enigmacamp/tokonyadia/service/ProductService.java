@@ -1,15 +1,19 @@
 package com.enigmacamp.tokonyadia.service;
 
+import com.enigmacamp.tokonyadia.dto.request.ProductRequest;
+import com.enigmacamp.tokonyadia.dto.response.ProductResponse;
 import com.enigmacamp.tokonyadia.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
-    Product saveProduct(Product product);
+    Product saveProduct(ProductRequest product);
     List<Product> saveAllProducts(List<Product> products);
-    List<Product> getAllProduct();
+    Page<ProductResponse> getAllProduct(Pageable pageable);
     Product getProductById(UUID id);
     void deleteProduct(UUID id);
-    Product updateProduct(Product product);
+    Product updateProduct(ProductRequest product, UUID Id);
 }

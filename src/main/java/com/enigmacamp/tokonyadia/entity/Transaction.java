@@ -31,10 +31,11 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnoreProperties("transaction")
     private Customer customer;
 
     @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+
     private List<TransactionDetail> transactionDetails;
 
     @Override

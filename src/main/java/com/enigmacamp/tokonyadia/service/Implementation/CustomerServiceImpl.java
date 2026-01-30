@@ -1,5 +1,7 @@
 package com.enigmacamp.tokonyadia.service.Implementation;
 
+import com.enigmacamp.tokonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.tokonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.tokonyadia.entity.Customer;
 import com.enigmacamp.tokonyadia.repository.CustomerRepository;
 import com.enigmacamp.tokonyadia.service.CustomerService;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -18,7 +21,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public Customer saveCustomer(CustomerRequest customerPayload) {
+        Customer customer = Customer.builder()
+                .fullname(customerPayload.fullname())
+                .email(customerPayload.email())
+                .address(customerPayload.address())
+                .gender(customerPayload.gender())
+                .member(customerPayload.memberId())
+                .build();
         return customerRepository.save(customer);
     }
 
@@ -29,8 +39,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerResponse> getAllCustomers() {
+        return customerRepository.findAll()
+                .stream()
+                .map(Customer::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,9 +66,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) {
-        getCustomerById(customer.getId());
-        return saveCustomer(customer);
+    public Customer updateCustomer(CustomerRequest customerPayload, UUID id) {
+        getCustomerById(id);
+        Customer customer = Customer.builder()
+                .id(id)
+                .fullname(customerPayload.fullname())
+                .email(customerPayload.email())
+                .address(customerPayload.address())
+                .gender(customerPayload.gender())
+                .member(customerPayload.memberId())
+                .build();
+        return customerRepository.save(customer);
     }
 
     @Override

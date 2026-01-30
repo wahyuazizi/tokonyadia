@@ -1,17 +1,14 @@
 package com.enigmacamp.tokonyadia.entity;
 
-import com.enigmacamp.tokonyadia.utils.Gender;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.enigmacamp.tokonyadia.dto.response.CustomerResponse;
+import com.enigmacamp.tokonyadia.utils.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
@@ -24,7 +21,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Customer {
+@Builder
+public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -45,8 +43,22 @@ public class Customer {
     private Member member;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL,  fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonIgnore
+    @JsonIgnoreProperties({"customer"})
+
     private List<Transaction> transactions;
+
+    public CustomerResponse toResponse(){
+        return CustomerResponse.builder()
+                .id(getId())
+                .fullname(getFullname())
+                .email(getEmail())
+                .address(getAddress())
+                .gender(getGender())
+                .member(getMember())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
 
     @Override
     public String toString() {

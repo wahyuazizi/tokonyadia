@@ -1,5 +1,7 @@
 package com.enigmacamp.tokonyadia.controller;
 
+import com.enigmacamp.tokonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.tokonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.tokonyadia.entity.Customer;
 import com.enigmacamp.tokonyadia.service.CustomerService;
 import com.enigmacamp.tokonyadia.utils.constant.ApiUrlConstant;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(ApiUrlConstant.CUSTOMER)
@@ -18,8 +21,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer saveCustomer(@RequestBody Customer customer) {
-        return customerService.saveCustomer(customer);
+    public CustomerResponse saveCustomer(@RequestBody CustomerRequest customer) {
+        return customerService.saveCustomer(customer).toResponse();
     }
 
     @PostMapping("/batch")
@@ -28,7 +31,7 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
+    public List<CustomerResponse> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
@@ -43,10 +46,9 @@ public class CustomerController {
         customerService.deleteCustomer(id);
     }
 
-    @PutMapping
-    public Customer updateCustomer(@RequestBody Customer customer) {
-        getCustomerById(customer.getId());
-        return customerService.updateCustomer(customer);
+    @PutMapping("/{id}")
+    public Customer updateCustomer(@RequestBody CustomerRequest customer, @PathVariable UUID id) {
+        return customerService.updateCustomer(customer, id);
     }
 
     @GetMapping("/emails/{email}")

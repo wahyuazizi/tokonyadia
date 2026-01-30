@@ -1,12 +1,10 @@
 package com.enigmacamp.tokonyadia.entity;
 
+import com.enigmacamp.tokonyadia.dto.response.ProductResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
@@ -19,7 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Product {
+@Builder
+public class Product extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -30,8 +29,19 @@ public class Product {
     private Integer stock;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnoreProperties({"product"})
     private List<TransactionDetail> transactionDetails;
+
+    public ProductResponse toResponse(){
+        return ProductResponse.builder()
+                .id(getId())
+                .name(getProductName())
+                .price(getProductPrice())
+                .stock(getStock())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
 
     @Override
     public String toString() {
