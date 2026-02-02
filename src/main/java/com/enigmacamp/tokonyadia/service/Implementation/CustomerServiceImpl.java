@@ -1,11 +1,16 @@
 package com.enigmacamp.tokonyadia.service.Implementation;
 
 import com.enigmacamp.tokonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.tokonyadia.dto.request.CustomerSearch;
 import com.enigmacamp.tokonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.tokonyadia.entity.Customer;
 import com.enigmacamp.tokonyadia.repository.CustomerRepository;
 import com.enigmacamp.tokonyadia.service.CustomerService;
+import com.enigmacamp.tokonyadia.spesification.CustomerSpecification;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,11 +44,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public List<CustomerResponse> getAllCustomers() {
-        return customerRepository.findAll()
-                .stream()
-                .map(Customer::toResponse)
-                .collect(Collectors.toList());
+    public Page<CustomerResponse> getAllCustomers(Pageable pageable, CustomerSearch customerSearch) {
+        Specification<Customer> customerSpecification = CustomerSpecification.getSpecification(customerSearch);
+        return customerRepository.findAll(customerSpecification, pageable)
+                .map(Customer::toResponse);
     }
 
     @Override
@@ -79,20 +83,20 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
-    @Override
-    public Customer getCustomerByEmail(String email) {
-        return customerRepository.getCustomerByEmail(email);
-    }
-
-    @Override
-    public Customer getCustomerFullname(String fullname) {
-        return customerRepository.getCustomerFullname(fullname);
-    }
-
-    @Override
-    public Customer getCustomerEmailandName(String email, String fullname) {
-        return customerRepository.findByEmailAndFullname(email, fullname);
-    }
+//    @Override
+//    public Customer getCustomerByEmail(String email) {
+//        return customerRepository.getCustomerByEmail(email);
+//    }
+//
+//    @Override
+//    public Customer getCustomerFullname(String fullname) {
+//        return customerRepository.getCustomerFullname(fullname);
+//    }
+//
+//    @Override
+//    public Customer getCustomerEmailandName(String email, String fullname) {
+//        return customerRepository.findByEmailAndFullname(email, fullname);
+//    }
 
 
 }

@@ -1,6 +1,8 @@
 package com.enigmacamp.tokonyadia.controller;
 
 import com.enigmacamp.tokonyadia.dto.request.ProductRequest;
+import com.enigmacamp.tokonyadia.dto.request.ProductSearch;
+import com.enigmacamp.tokonyadia.dto.response.PageResponseWrapper;
 import com.enigmacamp.tokonyadia.dto.response.ProductResponse;
 import com.enigmacamp.tokonyadia.entity.Product;
 import com.enigmacamp.tokonyadia.service.ProductService;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +43,20 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductResponse> getAllProduct(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "3") Integer size ) {
-        Pageable pageable = PageRequest.of(page, size);
-        return productService.getAllProduct(pageable);
+//    Bisa langsung pake Pageable di paramnya
+    // ?page=1&size=2&sort=propertisname,desc/ascc
+    public ResponseEntity<PageResponseWrapper<ProductResponse>> getAllProduct(
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "3") Integer size,
+            @RequestParam(name = "sort", defaultValue = "productName") String sortBy,
+            @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection,
+            @ModelAttribute ProductSearch productSearch) {
+
+        int validatePage = page > 0 ? page - 1 : 0;
+        Pageable pageable = PageRequest.of(validatePage, size, Sort.by(sortDirection, sortBy));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new PageResponseWrapper<>(productService.getAllProduct(pageable, productSearch)));
     }
 
 
