@@ -12,9 +12,8 @@ import java.util.UUID;
 @Builder
 public class TransactionDetailResponse {
     private UUID id;
-    private Product product;
+    private ProductResponse product;
     private Integer quantity;
     private Double priceSell;
     private Double subTotal;
-    private Double totalPrice;
 }

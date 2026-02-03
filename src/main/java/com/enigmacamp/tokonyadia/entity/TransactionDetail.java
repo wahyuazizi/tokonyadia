@@ -41,7 +41,7 @@ public class TransactionDetail extends SoftDeletable{
     public TransactionDetailResponse toResponse(){
         return TransactionDetailResponse.builder()
                 .id(getId())
-                .product(getProduct())
+                .product(getProduct().toResponse())
                 .quantity(getQuantity())
                 .priceSell(getPriceSell())
                 .build();

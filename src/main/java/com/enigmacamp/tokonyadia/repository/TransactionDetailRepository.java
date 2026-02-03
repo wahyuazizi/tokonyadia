@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionDetailRepository extends JpaRepository<TransactionDetail, UUID> {
-    @Query("SELECT (td.priceSell*td.quantity) AS subTotal FROM TransactionDetail td ")
-    List<Double> getSubTotal();
+    @Query("""
+SELECT (td.priceSell * td.quantity)
+FROM TransactionDetail td
+WHERE td.id = :detailId
+""")
+    Double getSubTotalByDetailId(@Param("detailId") UUID detailId);
 
-    @Query("SELECT SUM (td.priceSell*td.quantity) AS total FROM TransactionDetail td WHERE td.id =:txId")
-    Double getTotal(@Param("txId") UUID id);
+
 }

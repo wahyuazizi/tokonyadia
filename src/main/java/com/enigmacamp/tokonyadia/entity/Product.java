@@ -2,7 +2,6 @@ package com.enigmacamp.tokonyadia.entity;
 
 import com.enigmacamp.tokonyadia.dto.response.ProductResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -38,8 +37,6 @@ public class Product extends BaseEntity{
                 .name(getProductName())
                 .price(getProductPrice())
                 .stock(getStock())
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
                 .build();
     }
 

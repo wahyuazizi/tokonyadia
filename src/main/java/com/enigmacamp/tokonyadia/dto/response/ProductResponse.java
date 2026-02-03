@@ -16,6 +16,4 @@ public class ProductResponse {
     private String name;
     private Double price;
     private Integer stock;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

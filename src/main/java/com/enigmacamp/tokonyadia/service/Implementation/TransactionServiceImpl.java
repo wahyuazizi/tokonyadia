@@ -1,9 +1,7 @@
 package com.enigmacamp.tokonyadia.service.Implementation;
 
-import com.enigmacamp.tokonyadia.dto.request.TransactionRequest;
 import com.enigmacamp.tokonyadia.dto.request.TransactionSearch;
 import com.enigmacamp.tokonyadia.dto.response.TransactionResponse;
-import com.enigmacamp.tokonyadia.entity.Product;
 import com.enigmacamp.tokonyadia.entity.Transaction;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 import com.enigmacamp.tokonyadia.repository.TransactionRepository;
@@ -80,7 +78,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Page<TransactionResponse> getTransactions(Pageable pageable, TransactionSearch transactionSearch) {
         Specification<Transaction> transactionSpecification = TransactionSpecification.getTransactionSpecification(transactionSearch);
-        return transactionRepository.findAll(transactionSpecification, pageable).map(Transaction::toResponse);
+
+        return transactionRepository.findAll(transactionSpecification, pageable).map(trx->
+
+                    TransactionResponse.builder()
+                    .id(trx.getId())
+                    .date(trx.getDate())
+                    .customer(trx.getCustomer().toResponse())
+                    .transactionDetailResponses(transactionDetailServiceImpl.getAllTransactionDetails())
+                    .totalPrice(transactionRepository.getTotalByTransactionId(trx.getId())).build()
+        );
     }
 
     @Override

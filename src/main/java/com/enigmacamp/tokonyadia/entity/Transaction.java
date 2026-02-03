@@ -1,13 +1,9 @@
 package com.enigmacamp.tokonyadia.entity;
 
 import com.enigmacamp.tokonyadia.dto.response.TransactionResponse;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
@@ -45,8 +41,8 @@ public class Transaction extends SoftDeletable{
         return TransactionResponse.builder()
                 .id(getId())
                 .date(getDate())
-                .customer(getCustomer())
-                .transactionDetail(getTransactionDetails())
+                .customer(getCustomer().toResponse())
+                .transactionDetailResponses(getTransactionDetails().stream().map(TransactionDetail::toResponse).toList())
                 .build();
     }
 

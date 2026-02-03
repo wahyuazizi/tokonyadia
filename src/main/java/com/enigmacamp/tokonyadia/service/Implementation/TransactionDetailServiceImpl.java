@@ -62,20 +62,17 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     public List<TransactionDetailResponse> getAllTransactionDetails() {
 
         List<TransactionDetail> transactionDetailList = transactionDetailRepository.findAll();
-        Double total = transactionDetailList.stream().mapToDouble(detail-> detail.getQuantity()* detail.getPriceSell()).sum();
 
-        List<TransactionDetailResponse> listTrxDetail = transactionDetailList.stream()
+        return transactionDetailList.stream()
                 .map(
-                        detail-> TransactionDetailResponse.builder()
-                                .id(detail.getId())
-                                .product(detail.getProduct())
-                                .quantity(detail.getQuantity())
-                                .priceSell(detail.getPriceSell())
-                                .subTotal(detail.getPriceSell()* detail.getQuantity())
-                                .totalPrice(total)
-                                .build()
+            detail-> TransactionDetailResponse.builder()
+                    .id(detail.getId())
+                    .product(detail.getProduct().toResponse())
+                    .quantity(detail.getQuantity())
+                    .priceSell(detail.getPriceSell())
+                    .subTotal(transactionDetailRepository.getSubTotalByDetailId(detail.getId()))
+                    .build()
                 ).toList();
-        return listTrxDetail;
     }
 
     @Override

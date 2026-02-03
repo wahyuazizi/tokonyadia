@@ -54,9 +54,7 @@ public class Customer extends BaseEntity {
                 .email(getEmail())
                 .address(getAddress())
                 .gender(getGender())
-                .member(getMember())
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
+                .member(getMember().toResponse())
                 .build();
     }
 

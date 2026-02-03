@@ -1,7 +1,5 @@
 package com.enigmacamp.tokonyadia.dto.response;
 
-import com.enigmacamp.tokonyadia.entity.Customer;
-import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,6 +14,8 @@ import java.util.UUID;
 public class TransactionResponse {
     private UUID id;
     private LocalDate date;
-    private Customer customer;
-    private List<TransactionDetail> transactionDetail;
+    private CustomerResponse customer;
+    private List<TransactionDetailResponse> transactionDetailResponses;
+
+    private Double totalPrice;
 }

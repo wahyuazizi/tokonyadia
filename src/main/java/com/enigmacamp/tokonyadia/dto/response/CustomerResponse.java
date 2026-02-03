@@ -19,7 +19,5 @@ public class CustomerResponse {
     private String email;
     private String address;
     private Gender gender;
-    private Member member;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private MemberResponse member;
 }
