@@ -1,6 +1,7 @@
 package com.enigmacamp.tokonyadia.controller;
 
 import com.enigmacamp.tokonyadia.dto.request.TransactionDetailRequest;
+import com.enigmacamp.tokonyadia.dto.response.TransactionDetailResponse;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 import com.enigmacamp.tokonyadia.service.TransactionDetailService;
 import com.enigmacamp.tokonyadia.utils.constant.ApiUrlConstant;
@@ -32,7 +33,7 @@ public class TransactionDetailController {
     }
 
     @GetMapping
-    public List<TransactionDetail> getAllTransactionDetails() {
+    public List<TransactionDetailResponse> getAllTransactionDetails() {
         return transactionDetailService.getAllTransactionDetails();
     }
 
