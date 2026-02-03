@@ -1,5 +1,6 @@
 package com.enigmacamp.tokonyadia.entity;
 
+import com.enigmacamp.tokonyadia.dto.response.MemberResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -37,6 +38,11 @@ public class Member {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Customer customer;
+
+    public MemberResponse toResponse() {
+        return MemberResponse.builder()
+                .username(getUsername()).build();
+    }
 
     @Override
     public String toString() {

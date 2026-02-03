@@ -1,5 +1,6 @@
 package com.enigmacamp.tokonyadia.entity;
 
+import com.enigmacamp.tokonyadia.dto.response.TransactionResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -37,8 +38,17 @@ public class Transaction extends SoftDeletable{
     private Customer customer;
 
     @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-
+    @JsonIgnoreProperties("transaction")
     private List<TransactionDetail> transactionDetails;
+
+    public TransactionResponse toResponse(){
+        return TransactionResponse.builder()
+                .id(getId())
+                .date(getDate())
+                .customer(getCustomer())
+                .transactionDetail(getTransactionDetails())
+                .build();
+    }
 
     @Override
     public String toString() {

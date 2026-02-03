@@ -1,12 +1,18 @@
 package com.enigmacamp.tokonyadia.service.Implementation;
 
 import com.enigmacamp.tokonyadia.dto.request.TransactionRequest;
+import com.enigmacamp.tokonyadia.dto.request.TransactionSearch;
+import com.enigmacamp.tokonyadia.dto.response.TransactionResponse;
 import com.enigmacamp.tokonyadia.entity.Product;
 import com.enigmacamp.tokonyadia.entity.Transaction;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 import com.enigmacamp.tokonyadia.repository.TransactionRepository;
 import com.enigmacamp.tokonyadia.service.TransactionService;
+import com.enigmacamp.tokonyadia.spesification.TransactionSpecification;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,8 +78,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getTransactions() {
-        return transactionRepository.findAll();
+    public Page<TransactionResponse> getTransactions(Pageable pageable, TransactionSearch transactionSearch) {
+        Specification<Transaction> transactionSpecification = TransactionSpecification.getTransactionSpecification(transactionSearch);
+        return transactionRepository.findAll(transactionSpecification, pageable).map(Transaction::toResponse);
     }
 
     @Override

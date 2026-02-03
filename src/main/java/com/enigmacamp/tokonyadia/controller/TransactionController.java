@@ -1,11 +1,16 @@
 package com.enigmacamp.tokonyadia.controller;
 
 import com.enigmacamp.tokonyadia.dto.request.TransactionRequest;
+import com.enigmacamp.tokonyadia.dto.request.TransactionSearch;
+import com.enigmacamp.tokonyadia.dto.response.PageResponseWrapper;
+import com.enigmacamp.tokonyadia.dto.response.TransactionResponse;
 import com.enigmacamp.tokonyadia.entity.Transaction;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 import com.enigmacamp.tokonyadia.service.TransactionDetailService;
 import com.enigmacamp.tokonyadia.service.TransactionService;
 import com.enigmacamp.tokonyadia.utils.constant.ApiUrlConstant;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +42,14 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return transactionService.getTransactions();
+    public ResponseEntity<PageResponseWrapper<TransactionResponse>> getAllTransactions(
+            Pageable pageable, @ModelAttribute TransactionSearch transactionSearch
+            ) {
+        int validatePage = pageable.getPageNumber() > 0 ? pageable.getPageNumber() -1 : 0;
+        Pageable validatePageable = PageRequest.of(validatePage, pageable.getPageSize(), pageable.getSort());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new PageResponseWrapper<>(transactionService.getTransactions(validatePageable, transactionSearch))
+        );
     }
 
     @GetMapping("/{id}")

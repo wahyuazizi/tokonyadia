@@ -1,5 +1,6 @@
 package com.enigmacamp.tokonyadia.entity;
 
+import com.enigmacamp.tokonyadia.dto.response.TransactionDetailResponse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,4 +37,14 @@ public class TransactionDetail extends SoftDeletable{
 
     private Integer quantity;
     private Double priceSell;
+
+    public TransactionDetailResponse toResponse(){
+        return TransactionDetailResponse.builder()
+                .id(getId())
+                .product(getProduct())
+                .quantity(getQuantity())
+                .priceSell(getPriceSell())
+                .build();
+    }
+
 }

@@ -57,7 +57,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 
     @Override
     public List<TransactionDetail> getAllTransactionDetails() {
-        return transactionDetailRepository.findAll();
+
+        List<TransactionDetail> transactionDetailList = transactionDetailRepository.findAll();
+        Double subTotal = transactionDetailList.
     }
 
     @Override
