@@ -1,6 +1,7 @@
 package com.enigmacamp.tokonyadia.service;
 
 import com.enigmacamp.tokonyadia.dto.request.TransactionDetailRequest;
+import com.enigmacamp.tokonyadia.dto.response.TransactionDetailResponse;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface TransactionDetailService {
     TransactionDetail saveTransactionDetail(TransactionDetail transactionDetail);
     List<TransactionDetail> saveAllTransactionDetails(List<TransactionDetail> transactionDetails);
     TransactionDetail getTransactionDetailById(UUID id);
-    List<TransactionDetail> getAllTransactionDetails();
+    List<TransactionDetailResponse> getAllTransactionDetails();
     void cancelTransactionDetail(UUID id);
 //    TransactionDetail updateTransactionDetail(TransactionDetail transactionDetail);
 }

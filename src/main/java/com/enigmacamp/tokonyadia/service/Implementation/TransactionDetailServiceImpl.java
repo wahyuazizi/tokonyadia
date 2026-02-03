@@ -1,6 +1,8 @@
 package com.enigmacamp.tokonyadia.service.Implementation;
 
 import com.enigmacamp.tokonyadia.dto.request.TransactionDetailRequest;
+import com.enigmacamp.tokonyadia.dto.response.TransactionDetailResponse;
+import com.enigmacamp.tokonyadia.dto.response.TransactionResponse;
 import com.enigmacamp.tokonyadia.entity.Product;
 import com.enigmacamp.tokonyadia.entity.Transaction;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionDetailServiceImpl implements TransactionDetailService {
@@ -56,10 +59,23 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     }
 
     @Override
-    public List<TransactionDetail> getAllTransactionDetails() {
+    public List<TransactionDetailResponse> getAllTransactionDetails() {
 
         List<TransactionDetail> transactionDetailList = transactionDetailRepository.findAll();
-        Double subTotal = transactionDetailList.
+        Double total = transactionDetailList.stream().mapToDouble(detail-> detail.getQuantity()* detail.getPriceSell()).sum();
+
+        List<TransactionDetailResponse> listTrxDetail = transactionDetailList.stream()
+                .map(
+                        detail-> TransactionDetailResponse.builder()
+                                .id(detail.getId())
+                                .product(detail.getProduct())
+                                .quantity(detail.getQuantity())
+                                .priceSell(detail.getPriceSell())
+                                .subTotal(detail.getPriceSell()* detail.getQuantity())
+                                .totalPrice(total)
+                                .build()
+                ).toList();
+        return listTrxDetail;
     }
 
     @Override
