@@ -85,7 +85,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .id(trx.getId())
                     .date(trx.getDate())
                     .customer(trx.getCustomer().toResponse())
-                    .transactionDetailResponses(transactionDetailServiceImpl.getAllTransactionDetails())
+                    .transactionDetail(transactionDetailServiceImpl.getAllTransactionDetails())
                     .totalPrice(transactionRepository.getTotalByTransactionId(trx.getId())).build()
         );
     }

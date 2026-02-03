@@ -42,7 +42,7 @@ public class Transaction extends SoftDeletable{
                 .id(getId())
                 .date(getDate())
                 .customer(getCustomer().toResponse())
-                .transactionDetailResponses(getTransactionDetails().stream().map(TransactionDetail::toResponse).toList())
+                .transactionDetail(getTransactionDetails().stream().map(TransactionDetail::toResponse).toList())
                 .build();
     }
 

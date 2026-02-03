@@ -15,7 +15,7 @@ public class TransactionResponse {
     private UUID id;
     private LocalDate date;
     private CustomerResponse customer;
-    private List<TransactionDetailResponse> transactionDetailResponses;
+    private List<TransactionDetailResponse> transactionDetail;
 
     private Double totalPrice;
 }
