@@ -1,8 +1,11 @@
 package com.enigmacamp.tokonyadia.controller;
 
+import com.enigmacamp.tokonyadia.dto.request.TransactionDetailRequest;
 import com.enigmacamp.tokonyadia.entity.TransactionDetail;
 import com.enigmacamp.tokonyadia.service.TransactionDetailService;
 import com.enigmacamp.tokonyadia.utils.constant.ApiUrlConstant;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +21,9 @@ public class TransactionDetailController {
     }
 
     @PostMapping
-    public TransactionDetail createTransactionDetail(@RequestBody TransactionDetail transactionDetail) {
-        return transactionDetailService.saveTransactionDetail(transactionDetail);
+    public ResponseEntity<TransactionDetail> createTransactionDetail(@RequestBody TransactionDetail transactionDetailPayload) {
+        TransactionDetail transactionDetail = transactionDetailService.saveTransactionDetail(transactionDetailPayload);
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionDetail);
     }
 
     @PostMapping("/batch")
@@ -37,15 +41,15 @@ public class TransactionDetailController {
         return transactionDetailService.getTransactionDetailById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteTransactionDetailById(@PathVariable UUID id) {
+    @PutMapping("/{id}")
+    public void cancelTransactionDetailById(@PathVariable UUID id) {
         getTransactionDetailById(id);
-        transactionDetailService.deleteTransactionDetail(id);
+        transactionDetailService.cancelTransactionDetail(id);
     }
-
-    @PutMapping
-    public TransactionDetail updateTransactionDetail(@RequestBody TransactionDetail transactionDetail) {
-        getTransactionDetailById(transactionDetail.getId());
-        return transactionDetailService.updateTransactionDetail(transactionDetail);
-    }
+//
+//    @PutMapping
+//    public TransactionDetail updateTransactionDetail(@RequestBody TransactionDetail transactionDetail) {
+//        getTransactionDetailById(transactionDetail.getId());
+//        return transactionDetailService.updateTransactionDetail(transactionDetail);
+//    }
 }

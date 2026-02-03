@@ -1,5 +1,6 @@
 package com.enigmacamp.tokonyadia.service;
 
+import com.enigmacamp.tokonyadia.dto.request.TransactionRequest;
 import com.enigmacamp.tokonyadia.entity.Product;
 import com.enigmacamp.tokonyadia.entity.Transaction;
 
@@ -11,6 +12,6 @@ public interface TransactionService {
     List<Transaction> saveAllTransactions(List<Transaction> transactions);
     Transaction getTransactionById(UUID id);
     List<Transaction> getTransactions();
-    void deleteTransaction(UUID id);
-    Transaction updateTransaction(Transaction transaction);
+    void cancelTransaction(UUID id);
+//    Transaction updateTransaction(Transaction transaction);
 }

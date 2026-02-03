@@ -1,8 +1,13 @@
 package com.enigmacamp.tokonyadia.controller;
 
+import com.enigmacamp.tokonyadia.dto.request.TransactionRequest;
 import com.enigmacamp.tokonyadia.entity.Transaction;
+import com.enigmacamp.tokonyadia.entity.TransactionDetail;
+import com.enigmacamp.tokonyadia.service.TransactionDetailService;
 import com.enigmacamp.tokonyadia.service.TransactionService;
 import com.enigmacamp.tokonyadia.utils.constant.ApiUrlConstant;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,14 +17,18 @@ import java.util.UUID;
 @RequestMapping(ApiUrlConstant.TRANSACTION)
 public class TransactionController {
     private final TransactionService transactionService;
+    private final TransactionDetailController transactionDetailController;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService,  TransactionDetailController transactionDetailController) {
         this.transactionService = transactionService;
+        this.transactionDetailController = transactionDetailController;
     }
 
     @PostMapping
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        return transactionService.saveTransaction(transaction);
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transactionPayload) {
+        Transaction transaction = transactionService.saveTransaction(transactionPayload);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
     }
 
     @PostMapping("/batch")
@@ -37,15 +46,19 @@ public class TransactionController {
         return transactionService.getTransactionById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteTransaction(@PathVariable UUID id) {
-        getTransactionById(id);
-        transactionService.deleteTransaction(id);
+    @PutMapping("/{id}")
+    public void cancelTransaction(@PathVariable UUID id) {
+        Transaction transaction = getTransactionById(id);
+        List<TransactionDetail> transactionDetail = transaction.getTransactionDetails();
+        transactionService.cancelTransaction(id);
+        transactionDetail.forEach(transactionDetail1 -> {
+            transactionDetailController.cancelTransactionDetailById(transactionDetail1.getId());
+        });
     }
-
-    @PutMapping
-    public Transaction updateTransaction(@RequestBody Transaction transaction) {
-        getTransactionById(transaction.getId());
-        return transactionService.updateTransaction(transaction);
-    }
+//
+//    @PutMapping
+//    public Transaction updateTransaction(@RequestBody Transaction transaction) {
+//        getTransactionById(transaction.getId());
+//        return transactionService.updateTransaction(transaction);
+//    }
 }
