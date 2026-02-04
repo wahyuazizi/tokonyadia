@@ -10,4 +10,5 @@ public interface RefreshTokenService {
     Boolean isRefreshTokenExpired(RefreshToken refreshToken);
     Optional<RefreshToken>  getRefreshTokenByToken(String token);
     void deleteRefreshToken(RefreshToken refreshToken);
+    void deleteRefreshToken(String token);
 }

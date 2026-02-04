@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
-                );
+                ).logout(AbstractHttpConfigurer::disable);
+        ;
 
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
