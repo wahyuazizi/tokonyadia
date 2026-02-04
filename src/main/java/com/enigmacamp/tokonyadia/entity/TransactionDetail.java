@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Builder
-public class TransactionDetail extends SoftDeletable{
+public class TransactionDetail{
 
     @Id
     @GeneratedValue

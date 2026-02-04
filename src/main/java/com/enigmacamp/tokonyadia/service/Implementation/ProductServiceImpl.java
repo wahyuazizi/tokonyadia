@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,7 +66,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(UUID id) {
-        getProductById(id);
+        Product product = getProductById(id);
+        product.setDeleted(Boolean.TRUE);
+        product.setDeletedAt(LocalDateTime.now());
         productRepository.deleteById(id);
     }
 

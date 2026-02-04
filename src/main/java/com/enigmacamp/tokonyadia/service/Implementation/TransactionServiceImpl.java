@@ -94,8 +94,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     public void cancelTransaction(UUID id) {
         Transaction transaction = getTransactionById(id);
-        transaction.setDeleted(Boolean.TRUE);
-        transaction.setDeletedAt(LocalDateTime.now());
         transactionRepository.save(transaction);
     }
 //

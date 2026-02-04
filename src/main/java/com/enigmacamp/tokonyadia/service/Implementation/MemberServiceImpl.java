@@ -58,4 +58,9 @@ public class MemberServiceImpl implements MemberService {
         getMemberById(member.getId());
         return saveMember(member);
     }
+
+    @Override
+    public Boolean findByUsername(String username) {
+        return memberRepository.findByUsername(username).isPresent();
+    }
 }

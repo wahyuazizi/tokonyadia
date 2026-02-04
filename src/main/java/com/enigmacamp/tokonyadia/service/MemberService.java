@@ -12,4 +12,5 @@ public interface MemberService {
     Member getMemberById(UUID id);
     void deleteMember(UUID id);
     Member updateMember(Member member);
+    Boolean findByUsername(String username);
 }

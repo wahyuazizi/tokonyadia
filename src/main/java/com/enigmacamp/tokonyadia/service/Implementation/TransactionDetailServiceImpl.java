@@ -79,8 +79,6 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     @Transactional
     public void cancelTransactionDetail(UUID id) {
         TransactionDetail transactionDetail = getTransactionDetailById(id);
-        transactionDetail.setDeleted(Boolean.TRUE);
-        transactionDetail.setDeletedAt(LocalDateTime.now());
         transactionDetailRepository.save(transactionDetail);
     }
 //

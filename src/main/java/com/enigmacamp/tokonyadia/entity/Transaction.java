@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 //@SQLDelete(sql = "UPDATE trx_purchase SET deleted = true WHERE id = ?")
 //@SQLRestriction("delete = false")
-public class Transaction extends SoftDeletable{
+public class Transaction{
     @Id
     @GeneratedValue
     @UuidGenerator
