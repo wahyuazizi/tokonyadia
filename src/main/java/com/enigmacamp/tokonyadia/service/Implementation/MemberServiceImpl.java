@@ -7,6 +7,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -60,7 +61,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Boolean findByUsername(String username) {
-        return memberRepository.findByUsername(username).isPresent();
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
+
+    @Override
+    public Boolean existsByUsername(String username) {
+        return memberRepository.existsByUsername(username);
+    }
+
+
 }

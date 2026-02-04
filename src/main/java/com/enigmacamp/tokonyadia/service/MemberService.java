@@ -3,6 +3,7 @@ package com.enigmacamp.tokonyadia.service;
 import com.enigmacamp.tokonyadia.entity.Member;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface MemberService {
@@ -12,5 +13,6 @@ public interface MemberService {
     Member getMemberById(UUID id);
     void deleteMember(UUID id);
     Member updateMember(Member member);
-    Boolean findByUsername(String username);
+    Optional<Member> findByUsername(String username);
+    Boolean existsByUsername(String username);
 }
