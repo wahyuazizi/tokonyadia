@@ -4,8 +4,10 @@ import com.enigmacamp.tokonyadia.dto.response.ProductResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +32,11 @@ public class Product extends BaseEntity{
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"product"})
     private List<TransactionDetail> transactionDetails;
+
+    @SoftDelete
+    private Boolean deleted = Boolean.FALSE;
+
+    private LocalDateTime deletedAt;
 
     public ProductResponse toResponse(){
         return ProductResponse.builder()
