@@ -5,15 +5,19 @@ import com.enigmacamp.tokonyadia.dto.request.RegisterRequest;
 import com.enigmacamp.tokonyadia.dto.response.LoginResponse;
 import com.enigmacamp.tokonyadia.entity.Customer;
 import com.enigmacamp.tokonyadia.entity.Member;
+import com.enigmacamp.tokonyadia.entity.Role;
 import com.enigmacamp.tokonyadia.security.jwt.JwtUtil;
 import com.enigmacamp.tokonyadia.service.AuthService;
 import com.enigmacamp.tokonyadia.service.CustomerService;
 import com.enigmacamp.tokonyadia.service.MemberService;
+import com.enigmacamp.tokonyadia.service.RoleService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -23,13 +27,15 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final RoleService roleService;
 
-    public AuthServiceImpl(MemberService memberService, CustomerService customerService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public AuthServiceImpl(MemberService memberService, CustomerService customerService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil, RoleService roleService) {
         this.memberService = memberService;
         this.customerService = customerService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.roleService = roleService;
     }
 
     @Override
@@ -38,9 +44,13 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalStateException("Username is already in use");
         }
 
+        Role userRole = roleService.findRoleByName("USER")
+                .orElseThrow(()-> new RuntimeException("Role not found"));
+
         Member member = new Member();
         member.setUsername(registerRequest.getUsername());
         member.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        member.setRoles(Set.of(userRole));
         memberService.saveMember(member);
 
         Customer customer = new Customer();
@@ -62,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        String token = jwtUtil.generateToken(authentication.getName());
+        String token = jwtUtil.generateToken(authentication);
         return new LoginResponse(token);
     }
 }
