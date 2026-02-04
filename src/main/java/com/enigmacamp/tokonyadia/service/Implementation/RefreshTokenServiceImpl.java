@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,6 +28,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken createRefreshToken(UUID memberId) {
+
+        refreshTokenRepository.findByMemberId(memberId)
+                .ifPresent(refreshTokenRepository::delete);
+
         RefreshToken token = new RefreshToken();
         token.setMember(memberService.getMemberById(memberId));
         token.setToken(UUID.randomUUID().toString());
@@ -38,5 +43,15 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public Boolean isRefreshTokenExpired(RefreshToken refreshToken) {
 
         return refreshToken.getExpiresAt().isBefore(Instant.now());
+    }
+
+    @Override
+    public Optional<RefreshToken> getRefreshTokenByToken(String token) {
+        return refreshTokenRepository.findByToken(token);
+    }
+
+    @Override
+    public void deleteRefreshToken(RefreshToken refreshToken) {
+        refreshTokenRepository.delete(refreshToken);
     }
 }

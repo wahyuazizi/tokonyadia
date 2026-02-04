@@ -5,18 +5,17 @@ import com.enigmacamp.tokonyadia.dto.request.RegisterRequest;
 import com.enigmacamp.tokonyadia.dto.response.LoginResponse;
 import com.enigmacamp.tokonyadia.entity.Customer;
 import com.enigmacamp.tokonyadia.entity.Member;
+import com.enigmacamp.tokonyadia.entity.RefreshToken;
 import com.enigmacamp.tokonyadia.entity.Role;
 import com.enigmacamp.tokonyadia.security.jwt.JwtUtil;
-import com.enigmacamp.tokonyadia.service.AuthService;
-import com.enigmacamp.tokonyadia.service.CustomerService;
-import com.enigmacamp.tokonyadia.service.MemberService;
-import com.enigmacamp.tokonyadia.service.RoleService;
+import com.enigmacamp.tokonyadia.service.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -28,19 +27,21 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final RoleService roleService;
+    private final RefreshTokenService refreshTokenService;
 
-    public AuthServiceImpl(MemberService memberService, CustomerService customerService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil, RoleService roleService) {
+    public AuthServiceImpl(MemberService memberService, CustomerService customerService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil, RoleService roleService, RefreshTokenService refreshTokenService) {
         this.memberService = memberService;
         this.customerService = customerService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.roleService = roleService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Override
     public void register(RegisterRequest registerRequest) {
-        if(memberService.findByUsername(registerRequest.getUsername())){
+        if(memberService.existsByUsername(registerRequest.getUsername())){
             throw new IllegalStateException("Username is already in use");
         }
 
@@ -72,7 +73,18 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        String token = jwtUtil.generateToken(authentication);
-        return new LoginResponse(token);
+//        Akse token jwt
+        String accessToken = jwtUtil.generateToken(authentication);
+
+        Optional<Member> member = memberService.findByUsername(loginRequest.username());
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(member.get().getId());
+
+//
+//        String token = jwtUtil.generateToken(authentication);
+        return new LoginResponse(
+                accessToken,
+                refreshToken.getToken()
+        );
     }
 }
