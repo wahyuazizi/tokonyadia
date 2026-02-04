@@ -26,21 +26,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer saveCustomer(CustomerRequest customerPayload) {
-        Customer customer = Customer.builder()
-                .fullname(customerPayload.fullname())
-                .email(customerPayload.email())
-                .address(customerPayload.address())
-                .gender(customerPayload.gender())
-                .member(customerPayload.memberId())
-                .build();
+    public Customer saveCustomer(Customer customerPayload) {
+//        Customer customer = Customer.builder()
+//                .fullname(customerPayload.fullname())
+//                .email(customerPayload.email())
+//                .address(customerPayload.address())
+//                .gender(customerPayload.gender())
+//                .member(customerPayload.memberId())
+//                .build();
+        Customer customer = customerRepository.save(customerPayload);
         return customerRepository.save(customer);
     }
 
-    @Override
-    public List<Customer> saveAllCustomers(List<Customer> customers) {
-        return customerRepository.saveAll(customers);
-    }
+//    @Override
+//    public List<Customer> saveAllCustomers(List<Customer> customers) {
+//        return customerRepository.saveAll(customers);
+//    }
 
 
     @Override

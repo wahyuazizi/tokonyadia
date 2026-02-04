@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CustomerService {
-    Customer saveCustomer(CustomerRequest customer);
-    List<Customer> saveAllCustomers(List<Customer> customers);
+    Customer saveCustomer(Customer customer);
+//    List<Customer> saveAllCustomers(List<Customer> customers);
     Page<CustomerResponse> getAllCustomers(Pageable pageable, CustomerSearch customerSearch);
     Customer getCustomerById(UUID id);
     void deleteCustomer(UUID id);

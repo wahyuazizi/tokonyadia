@@ -31,14 +31,14 @@ public class CustomerController {
     }
 
     @PostMapping
-    public CustomerResponse saveCustomer(@RequestBody CustomerRequest customer) {
+    public CustomerResponse saveCustomer(@RequestBody Customer customer) {
         return customerService.saveCustomer(customer).toResponse();
     }
 
-    @PostMapping("/batch")
-    public List<Customer> saveCustomers(@RequestBody List<Customer> customers) {
-        return customerService.saveAllCustomers(customers);
-    }
+//    @PostMapping("/batch")
+//    public List<Customer> saveCustomers(@RequestBody List<Customer> customers) {
+//        return customerService.saveAllCustomers(customers);
+//    }
 
     @GetMapping
     public ResponseEntity<PageResponseWrapper<CustomerResponse>> getAllCustomers(

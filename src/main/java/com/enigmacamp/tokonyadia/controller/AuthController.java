@@ -2,8 +2,11 @@ package com.enigmacamp.tokonyadia.controller;
 
 
 import com.enigmacamp.tokonyadia.dto.request.LoginRequest;
+import com.enigmacamp.tokonyadia.dto.request.RegisterRequest;
 import com.enigmacamp.tokonyadia.dto.response.LoginResponse;
 import com.enigmacamp.tokonyadia.security.jwt.JwtUtil;
+import com.enigmacamp.tokonyadia.service.AuthService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,16 +22,17 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final AuthService  authService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, AuthService authService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.authService = authService;
     }
 
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
-//        System.out.println("Bcript: " + new BCryptPasswordEncoder().encode("admin123"));
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -38,5 +42,11 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(authentication.getName());
         return new LoginResponse(token);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest){
+        authService.register(registerRequest);
+        return ResponseEntity.ok("Register Successfully");
     }
 }
