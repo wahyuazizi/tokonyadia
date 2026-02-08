@@ -78,8 +78,8 @@ public class CustomerController {
 //        return customerService.getCustomerFullname(fullname);
 //    }
 //
-//    @GetMapping("/search")
-//    public Customer getCustomerByEmailAndFullname(@RequestParam  String email, @RequestParam String fullname) {
-//        return customerService.getCustomerEmailandName(email,fullname);
-//    }
+    @GetMapping("/search")
+    public List<Customer> getCustomerByEmailAndFullname(@RequestParam  String email, @RequestParam String fullname) {
+        return customerService.getCustomerByFullNameOrEmail(fullname,email);
+    }
 }

@@ -7,6 +7,7 @@ import com.enigmacamp.tokonyadia.service.MemberService;
 import com.enigmacamp.tokonyadia.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -56,6 +57,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
+    @Transactional
     public void deleteRefreshToken(String token) {
         refreshTokenRepository.deleteByToken(token);
     }

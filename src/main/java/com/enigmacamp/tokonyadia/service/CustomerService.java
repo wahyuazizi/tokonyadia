@@ -21,4 +21,5 @@ public interface CustomerService {
 //    Customer getCustomerByEmail(String email);
 //    Customer getCustomerFullname(String fullname);
 //    Customer getCustomerEmailandName(String email, String fullname);
+    List<Customer> getCustomerByFullNameOrEmail(String fullname, String email);
 }

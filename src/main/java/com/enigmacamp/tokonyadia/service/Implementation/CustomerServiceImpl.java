@@ -84,7 +84,12 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
-//    @Override
+    @Override
+    public List<Customer> getCustomerByFullNameOrEmail(String fullname, String email) {
+        return customerRepository.findCustomerByFullnameIsLikeIgnoreCaseOrEmailIsLike(fullname, email);
+    }
+
+    //    @Override
 //    public Customer getCustomerByEmail(String email) {
 //        return customerRepository.getCustomerByEmail(email);
 //    }
